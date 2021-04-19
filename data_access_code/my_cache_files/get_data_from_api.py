@@ -18,6 +18,19 @@ attraction_types_to_choose = [
 
 
 class CityAttrInfo:
+    '''a city with a given attraction type
+
+    Instance Attributes
+    -------------------
+    city_name: str
+        the name of the city to search
+
+    attraction_type: str
+        the type of the attraction in the city to search
+
+    city_attraction_lists: list
+        a list of attractions given the city and the attraction type
+    '''
 
     def __init__(self, city_name, city_attraction_type, city_attraction_list):
         self.name = generate_unique_city_attraction_name(city_name, city_attraction_type)
@@ -28,6 +41,19 @@ class CityAttrInfo:
 
 
 class Attraction:
+    '''an attraction
+
+    Instance Attributes
+    -------------------
+    attr_name: str
+        the name of the attraction
+    attr_lon: float
+        the longitude of the attraction
+    attr_lat: float
+        the latitude of the attraction
+    attr_rate: int
+        minimum rating of attraction's popularity
+    '''
 
     def __init__(self, attr_name, attr_lon, attr_lat, attr_rate):
         if attr_name != '':
@@ -43,6 +69,23 @@ class Attraction:
 
 
 class Hotel:
+    '''a hotel
+
+    Instance Attributes
+    -------------------
+    hotel_name: str
+        the name of the hotel
+    hotel_price: str
+        the price of the hotel, eg. "$", "$$", "$$$", "$$$$", or "$$$$$"
+    hotel_rating: float
+        the rating of the hotel
+    hotel_url: str
+        the url of the hotel on yelp
+    hotel_reviews: int
+        the number of reviews on this hotel
+    hotel_phone: str
+        the phone of the hotel
+    '''
 
     def __init__(self, hotel_name, hotel_price, hotel_rating, hotel_url,
                  hotel_reviews, hotel_phone):
@@ -106,6 +149,21 @@ def save_cache(cache_dict, cache_filename):
 # cur = conn.cursor()
 
 def get_city_location_info(city_to_search):
+    ''' get the location of the city
+
+    This function takes in the name of a city, and uses OpenTripMap API (url:
+    https://opentripmap.io/product) to get the longitude and latitude of the
+    city
+
+    Parameters
+    ----------
+    city_to_search: str
+        the name of the city to search using OpenTripMap API
+
+    Returns
+    -------
+    dict
+    '''
 
     file_name = 'city_location.json'
     cache_dict = open_cache(file_name)
@@ -144,14 +202,75 @@ def get_city_location_info(city_to_search):
 
 
 def generate_unique_city_attraction_name(city_name, attraction_type):
+    ''' generate the unique key by city name and attraction type
+
+    this function generates a unique string given city name and attraction
+    type, the generated string takes the form:
+    <city_name>_<attraction_type>
+
+    Parameters
+    ----------
+    city_name:　str
+        the name of the city
+
+    attraction_type: str
+        the name of the attraction type
+
+    Returns
+    -------
+    str
+    '''
+
     return city_name + '_' + attraction_type
 
 
 def generate_unique_hotel_name(lon, lat):
+    ''' generate the unique key by longitude and latitude
+
+    this function generates a unique string given longitude and latitude of the
+    attraction, the returned string takes the form of:
+    lon_<longitude>_and_lat_<latitude>
+
+    Parameters
+    ----------
+    lon: float
+        the longitude of the attraction
+
+    lat: float
+        the latitude of the attraction
+
+    Returns
+    -------
+    str
+    '''
+
     return f"lon_{str(lon)}_and_lat_{str(lat)}"
 
 
 def get_city_attractions_info(city_name, attraction_type, dict_for_location):
+    ''' get the attraction of the city
+
+    This function takes in the city name, attraction type, and the pre-stored
+    dictionary for location of the city. Then it uses OpenTripMap API (url:
+    https://opentripmap.io/product) to get the specific attraction type in the
+    specific city
+
+    Parameters
+    ----------
+    city_name: str
+        the name of the city
+
+    attraction_type: str
+        the attraction type interested in the given city
+
+    dict_for_location: dict
+        the dictionary containing key as city names, and value as city locations
+        this dictionary is constructed in advance
+    Returns
+    -------
+    list
+    '''
+
     file_name = 'city_location_attraction.json'
     cache_dict = open_cache(file_name)
     unique_name = generate_unique_city_attraction_name(city_name, attraction_type)
@@ -199,6 +318,25 @@ def get_city_attractions_info(city_name, attraction_type, dict_for_location):
 
 
 def get_weather_prediction(city_name, dict_for_location):
+    ''' get the weather prediction of the given city
+
+    This function takes in the city name, and the pre-stored dictionary for
+    location of the city. Then it uses Weather Unlocked API (url:
+    https://developer.weatherunlocked.com/) to get the weather of the given city
+
+    Parameters
+    ----------
+    city_name: str
+        the name of the city
+
+    dict_for_location: dict
+        the dictionary containing key as city names, and value as city locations
+        this dictionary is constructed in advance
+    Returns
+    -------
+    list
+    '''
+
     # dynamic, we will not use cache
     if city_name in dict_for_location:
         base_url = 'http://api.weatherunlocked.com/api'
@@ -219,6 +357,25 @@ def get_weather_prediction(city_name, dict_for_location):
 
 
 def get_hotels(attr_lon, attr_lat):
+    ''' get the hotel given the longitude and the latitude
+
+    This function takes in the longitude and latitude of a location, and get
+    the hotels near this location using Yelp Fusion API (url:
+    https://www.yelp.com/developers/documentation/v3)
+
+    Parameters
+    ----------
+    attr_lon: float
+        longitude of the location
+
+    attr_lat: float
+        latitude of the location
+
+    Returns
+    -------
+    dict
+    '''
+
     filename = 'hotels_cache.json'
     cache_dict = open_cache(filename)
     unique_name = generate_unique_hotel_name(attr_lon, attr_lat)
@@ -239,133 +396,133 @@ def get_hotels(attr_lon, attr_lat):
         return rep
 
 
-
-attractions_list = []
-hotel_list = []
-while True:
-    if attractions_list == []:
-        my_city = input('Which city is your destination? "exit" to end the program').strip().lower()
-        if my_city == "exit":
-            break
-        else:
-            while True:
-                attraction_type_search = input(
-                    'What kind of attraction do yo want to search? input a number between 1 to 28').strip()
-                if attraction_type_search.isnumeric():
-                    if 1 <= int(attraction_type_search) <= 28:
-                        break
-                    else:
-                        print('you should input a number between 1 and 28!')
-                else:
-                    print('you should input a number!!')
-
-            index = int(attraction_type_search)
-            my_city_loc_dict = get_city_location_info(my_city)
-            print(my_city_loc_dict)
-            my_city_attr_list = get_city_attractions_info(my_city,
-                                                          attraction_types_to_choose[index - 1],
-                                                          open_cache('city_location.json'))
-            my_city_weather = get_weather_prediction(my_city, open_cache('city_location.json'))
-            print('+____________________+')
-            #print(my_city_attr_list)
-
-            if my_city_loc_dict != {}:
-                temp_city = CityAttrInfo(my_city,
-                                         attraction_types_to_choose[index - 1],
-                                         my_city_attr_list)
-                print(temp_city.info())
-                #print(temp_city.attractions)
-                #print(type(temp_city.attractions))
-                num_of_attr = len(temp_city.attractions)
-                print(num_of_attr)
-                print(f'temperature in {my_city}')
-                print('min_temp:', my_city_weather[2]['temp_min_c'], 'max_temp', my_city_weather[1]['temp_max_c'])
-                if num_of_attr == 0:
-                    print(f'the input city {my_city} does not have {attraction_types_to_choose[index-1]}')
-                    attractions_list = []
-                    print('cannot have choice for hotels!!!')
-                else:
-                    attractions_list = []
-                    for i in range(num_of_attr):
-                        temp_attraction = Attraction(temp_city.attractions[i]['name'],
-                                                     temp_city.attractions[i]['point']['lon'],
-                                                     temp_city.attractions[i]['point']['lat'],
-                                                     temp_city.attractions[i]['rate'])
-                        #print(('[' + str(i+1) + ']').ljust(5), end='')
-                        #print(temp_attraction.info())
-                        attractions_list.append(temp_attraction)
-                # print('min_temp:',my_city_weather[2]['temp_min_c'], 'max_temp', my_city_weather[1]['temp_max_c'])
-
-            else:
-                print('cannot establish the city instance!')
-                print(my_city_weather)
-
-            print(len(open_cache('city_location.json')))
-            print(len(open_cache('city_location_attraction.json')))
-
-
-    if attractions_list != []:
-        if hotel_list == []:
-            for i in range(len(attractions_list)):
-                print(('[' + str(i+1) + ']').ljust(5), end='')
-                print(attractions_list[i].info())
-            query_hotels_nearby = input('you want hotels near which attraction?')
-            if query_hotels_nearby.strip().isnumeric():
-                if 0 < int(query_hotels_nearby.strip()) <= len(attractions_list):
-                    attraction_instance_picked = attractions_list[int(query_hotels_nearby.strip()) - 1]
-                    print(f'now search for the hotels near {attraction_instance_picked.attr_name}...')
-                    hotels_response = get_hotels(attraction_instance_picked.attr_lon,
-                                                 attraction_instance_picked.attr_lat)
-                    total_hotels = len(hotels_response['businesses'])
-                    # print(hotels_response)
-                    if total_hotels == 0:
-                        hotel_list = []
-                        print(f'no hotels near the attraction {attraction_instance_picked.attr_name}')
-                    else:
-                        hotel_list = []
-                        for i in range(total_hotels):
-                            hotel_name = hotels_response['businesses'][i]['name']
-                            try:
-                                hotel_price = hotels_response['businesses'][i]['price']
-                            except:
-                                hotel_price = 'not provided'
-                            hotel_rating = hotels_response['businesses'][i]['rating']
-                            hotel_url = hotels_response['businesses'][i]['url']
-                            hotel_reviews = hotels_response['businesses'][i]['review_count']
-                            hotel_phone = hotels_response['businesses'][i]['display_phone']
-                            temp_hotel = Hotel(hotel_name,
-                                               hotel_price,
-                                               hotel_rating,
-                                               hotel_url,
-                                               hotel_reviews,
-                                               hotel_phone)
-                            hotel_list.append(temp_hotel)
-
-                else:
-                    print(f'please input a positive number less than or equal to {len(attractions_list)}')
-            elif query_hotels_nearby.strip().lower() == "exit":
+if __name__ == '__main__':
+    attractions_list = []
+    hotel_list = []
+    while True:
+        if attractions_list == []:
+            my_city = input('Which city is your destination? "exit" to end the program').strip().lower()
+            if my_city == "exit":
                 break
-            elif query_hotels_nearby.strip().lower() == "back":
-                attractions_list = []
             else:
-                print('you should input a valid number, "exit" or "back" here!')
+                while True:
+                    attraction_type_search = input(
+                        'What kind of attraction do yo want to search? input a number between 1 to 28').strip()
+                    if attraction_type_search.isnumeric():
+                        if 1 <= int(attraction_type_search) <= 28:
+                            break
+                        else:
+                            print('you should input a number between 1 and 28!')
+                    else:
+                        print('you should input a number!!')
 
-        if hotel_list != []:
-            for i in range(len(hotel_list)):
-                print(('[' + str(i + 1) + ']').ljust(5), end='')
-                print(hotel_list[i].info())
-            query_hotels = input('you want to search which hotel?')
-            if query_hotels.strip().isnumeric():
-                if 0 < int(query_hotels.strip()) <= len(hotel_list):
-                    hotel_instance_picked = hotel_list[int(query_hotels.strip()) - 1]
-                    print(f'now search for the hotel {hotel_instance_picked.name}...')
-                    #print(hotel_instance_picked.url)
-                    webbrowser.open(hotel_instance_picked.url)
+                index = int(attraction_type_search)
+                my_city_loc_dict = get_city_location_info(my_city)
+                print(my_city_loc_dict)
+                my_city_attr_list = get_city_attractions_info(my_city,
+                                                              attraction_types_to_choose[index - 1],
+                                                              open_cache('city_location.json'))
+                my_city_weather = get_weather_prediction(my_city, open_cache('city_location.json'))
+                print('+____________________+')
+                #print(my_city_attr_list)
+
+                if my_city_loc_dict != {}:
+                    temp_city = CityAttrInfo(my_city,
+                                             attraction_types_to_choose[index - 1],
+                                             my_city_attr_list)
+                    print(temp_city.info())
+                    #print(temp_city.attractions)
+                    #print(type(temp_city.attractions))
+                    num_of_attr = len(temp_city.attractions)
+                    print(num_of_attr)
+                    print(f'temperature in {my_city}')
+                    print('min_temp:', my_city_weather[2]['temp_min_c'], 'max_temp', my_city_weather[1]['temp_max_c'])
+                    if num_of_attr == 0:
+                        print(f'the input city {my_city} does not have {attraction_types_to_choose[index-1]}')
+                        attractions_list = []
+                        print('cannot have choice for hotels!!!')
+                    else:
+                        attractions_list = []
+                        for i in range(num_of_attr):
+                            temp_attraction = Attraction(temp_city.attractions[i]['name'],
+                                                         temp_city.attractions[i]['point']['lon'],
+                                                         temp_city.attractions[i]['point']['lat'],
+                                                         temp_city.attractions[i]['rate'])
+                            #print(('[' + str(i+1) + ']').ljust(5), end='')
+                            #print(temp_attraction.info())
+                            attractions_list.append(temp_attraction)
+                    # print('min_temp:',my_city_weather[2]['temp_min_c'], 'max_temp', my_city_weather[1]['temp_max_c'])
+
                 else:
-                    print(f'please input a positive number less than or equal to {len(hotel_list)}')
-            elif query_hotels.strip().lower() == "exit":
-                break
-            elif query_hotels.strip().lower() == "back":
-                hotel_list = []
-            else:
-                print('you should input a valid number, "exit" or "back" here!!!')
+                    print('cannot establish the city instance!')
+                    print(my_city_weather)
+
+                print(len(open_cache('city_location.json')))
+                print(len(open_cache('city_location_attraction.json')))
+
+
+        if attractions_list != []:
+            if hotel_list == []:
+                for i in range(len(attractions_list)):
+                    print(('[' + str(i+1) + ']').ljust(5), end='')
+                    print(attractions_list[i].info())
+                query_hotels_nearby = input('you want hotels near which attraction?')
+                if query_hotels_nearby.strip().isnumeric():
+                    if 0 < int(query_hotels_nearby.strip()) <= len(attractions_list):
+                        attraction_instance_picked = attractions_list[int(query_hotels_nearby.strip()) - 1]
+                        print(f'now search for the hotels near {attraction_instance_picked.attr_name}...')
+                        hotels_response = get_hotels(attraction_instance_picked.attr_lon,
+                                                     attraction_instance_picked.attr_lat)
+                        total_hotels = len(hotels_response['businesses'])
+                        # print(hotels_response)
+                        if total_hotels == 0:
+                            hotel_list = []
+                            print(f'no hotels near the attraction {attraction_instance_picked.attr_name}')
+                        else:
+                            hotel_list = []
+                            for i in range(total_hotels):
+                                hotel_name = hotels_response['businesses'][i]['name']
+                                try:
+                                    hotel_price = hotels_response['businesses'][i]['price']
+                                except:
+                                    hotel_price = 'not provided'
+                                hotel_rating = hotels_response['businesses'][i]['rating']
+                                hotel_url = hotels_response['businesses'][i]['url']
+                                hotel_reviews = hotels_response['businesses'][i]['review_count']
+                                hotel_phone = hotels_response['businesses'][i]['display_phone']
+                                temp_hotel = Hotel(hotel_name,
+                                                   hotel_price,
+                                                   hotel_rating,
+                                                   hotel_url,
+                                                   hotel_reviews,
+                                                   hotel_phone)
+                                hotel_list.append(temp_hotel)
+
+                    else:
+                        print(f'please input a positive number less than or equal to {len(attractions_list)}')
+                elif query_hotels_nearby.strip().lower() == "exit":
+                    break
+                elif query_hotels_nearby.strip().lower() == "back":
+                    attractions_list = []
+                else:
+                    print('you should input a valid number, "exit" or "back" here!')
+
+            if hotel_list != []:
+                for i in range(len(hotel_list)):
+                    print(('[' + str(i + 1) + ']').ljust(5), end='')
+                    print(hotel_list[i].info())
+                query_hotels = input('you want to search which hotel?')
+                if query_hotels.strip().isnumeric():
+                    if 0 < int(query_hotels.strip()) <= len(hotel_list):
+                        hotel_instance_picked = hotel_list[int(query_hotels.strip()) - 1]
+                        print(f'now search for the hotel {hotel_instance_picked.name}...')
+                        #print(hotel_instance_picked.url)
+                        webbrowser.open(hotel_instance_picked.url)
+                    else:
+                        print(f'please input a positive number less than or equal to {len(hotel_list)}')
+                elif query_hotels.strip().lower() == "exit":
+                    break
+                elif query_hotels.strip().lower() == "back":
+                    hotel_list = []
+                else:
+                    print('you should input a valid number, "exit" or "back" here!!!')
