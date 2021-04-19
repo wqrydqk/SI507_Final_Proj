@@ -50,6 +50,21 @@ def save_cache(cache_dict, cache_filename):
 
 
 def get_us_state_list(url_to_get_states):
+    ''' get the states information by a website url
+
+    the website contains the information of the states in the United States,
+    and in this function we scrape the web page and get the information of
+    state name,  state code, state population and state capital. The information
+    of state name and code will be saved in database later.
+
+    Parameters
+    ----------
+    url_to_get_states: str
+        the url of the website containing state information in the US
+    Returns
+    -------
+    list
+    '''
 
     file_name = 'states_cache.json'
     cache_dict = open_cache(file_name)
@@ -79,6 +94,21 @@ def get_us_state_list(url_to_get_states):
 
 
 def get_us_airports_list(url_to_get_airports):
+    ''' get the airports information by a website url
+
+    the website contains the information of the airports in the United States,
+    and in this function we scrape the web page and get the information of
+    airport code, airport name, airport city and airport state code.These
+    information will be saved in database later.
+
+    Parameters
+    ----------
+    url_to_get_airports: str
+        the url of the website containing airport information in the US
+    Returns
+    -------
+    list
+    '''
 
     file_name = "ariports_cache.json"
     cache_dict = open_cache(file_name)
@@ -107,6 +137,21 @@ def get_us_airports_list(url_to_get_airports):
 
 
 def get_us_city_area_list(url_to_get_city_area):
+    ''' get the city information by a website url
+
+    the website contains the information of largest cities in the United States,
+    and in this function we scrape the web page and get the information of
+    city name, city state, and city area. These information will be saved in
+    database later.
+
+    Parameters
+    ----------
+    url_to_get_city_area: str
+        the url of the website containing largest cities information in the US
+    Returns
+    -------
+    list
+    '''
 
     file_name = 'cityareas_cache.json'
     cache_dict = open_cache(file_name)
