@@ -233,8 +233,3 @@ if __name__ == "__main__":
     # close
     conn.close()
     print('DONE!')
-
-
-'''
-SELECT * FROM airports JOIN states ON airports.AirportState=states.StateCode WHERE AirportCity="New York"
-'''
