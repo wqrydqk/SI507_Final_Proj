@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Show Hotels</title>
+    <link rel="icon" href="static/favicon/travel.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="static/favicon/travel.ico" type="image/x-icon" />
+    <style>
+        div.graph {width:1500px;
+                   margin:1px auto;
+                   height:450px}
+        div.hotel_disp{
+        text_indent: 100px;
+        }
+        table{margin: 0 auto;}
+    </style>
+    <script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+<h2>We found {{num_hotels}} hotels near {{attraction_name}} within 3 km:</h2>
+<details open="open">
+    <summary>
+<h3>Your choice for displaying the hotels is '{{plot_type}}'</h3>
+    </summary>
+    <div>
+<div class="hotel_disp">
+{% if plot_type=="in_table" %}
+    <span style="text-indent: 50px">
+    <table border="1">
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                Hotel name
+            </th>
+            <th>
+                Hotel rating
+            </th>
+            <th>
+                Hotel price
+            </th>
+        </tr>
+    {% for hotel in hotels %}
+        <tr>
+            <td>
+                {{hotel.hotel_number}}
+            </td>
+            <td>
+                {{hotel.hotel_name}}
+            </td>
+            <td>
+                {{hotel.hotel_rating}}
+            </td>
+            <td>
+                {{hotel.hotel_price}}
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+    </span>
+
+{% else %}
+<div class="graph" id="myDiv1">
+    <script>
+        var bars = '{{plot_content | safe}}'
+        var obj = JSON.parse(bars)
+        Plotly.newPlot('myDiv1', obj)
+    </script>
+</div>
+{% endif %}
+</div>
+    </div>
+</details>
+
+<details>
+    <summary>
+<h3>Click on the hotel to book!</h3>
+    </summary>
+    <div>
+{% for hotel in hotels %}
+<ul>
+    <li>{{hotel.hotel_number}} <a href="{{hotel.hotel_url}}">{{hotel.hotel_name}}</a></li>
+</ul>
+{% endfor %}
+    </div>
+</details>
+</body>
+</html>

@@ -400,10 +400,19 @@ if __name__ == '__main__':
     attractions_list = []
     hotel_list = []
     while True:
+        dict_1 = open_cache("city_location.json")
+        print(len(dict_1))
+        dict_2 = open_cache("city_location_attraction.json")
+        print(len(dict_2))
+        dict_3 = open_cache("hotels_cache.json")
+        print(len(dict_3))
         if attractions_list == []:
             my_city = input('Which city is your destination? "exit" to end the program').strip().lower()
             if my_city == "exit":
                 break
+            if my_city == '':
+                print('you should at least input something!')
+                continue
             else:
                 while True:
                     attraction_type_search = input(

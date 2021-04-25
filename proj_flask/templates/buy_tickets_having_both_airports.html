@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Buy tickets</title>
+    <link rel="icon" href="static/favicon/travel.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="static/favicon/travel.ico" type="image/x-icon" />
+</head>
+<br>
+<p>Return <a href='/'>Home Page</a></p>
+<h1>Ticket date you choose: {{ticket_month}}-{{ticket_date}}</h1>
+<h2>Your departure city is {{dep_city}} in {{dep_state}} state</h2>
+<p>Airport name: {{dep_airport_name}}</p>
+<p>Airport IATA code: {{dep_airport_code}}</p>
+<h2>Your destination city is {{des_city}} in {{des_state}} state</h2>
+<p>Airport name: {{des_airport_name}}</p>
+<p>Airport IATA code: {{des_airport_code}}</p>
+</br>
+</br>
+<h2>You can click on the url below, it will redirect you to  https://www.skyscanner.com/</h2>
+<p>Click<a href={{ticket_url}}> BUY TICKETS! </a></p>
+</body>
+</html>

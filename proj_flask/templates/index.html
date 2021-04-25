@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Travel around the US</title>
+    <link rel="icon" href="static/favicon/travel.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="static/favicon/travel.ico" type="image/x-icon" />
+    <style>
+        #texts{float: left; width: 40%;}
+        #pictures{float: left; width: 60%}
+        h1.big_title{
+        text-align: center;
+        font-size: 44pt;
+        color: blue;
+        }
+        p.email{
+        text-align: right;
+        }
+    </style>
+</head>
+<br>
+<body>
+<h1 class="big_title">We Guide You Travel around the US!</h1>
+<div class="whole_page" align="center">
+<div id="texts">
+<h2> Searching for your destination city!</h2>
+<form action="/attractions_and_weathers_city_exist_attractions_not_empty" method="POST">
+    <p>What is your destination city in the US?  <input name="city_name" type="text"/>
+    </p>
+    </br>
+    <p>What is the type of attraction you are interested in?
+        <select name="attraction_type">
+            <option value="bridges">bridges</option>
+            <option value="historic_architecture">historic architecture</option>
+            <option value="lighthouses">lighthouses</option>
+            <option value="skyscrapers">skyscrapers</option>
+            <option value="towers">towers</option>
+            <option value="museums">museums</option>
+            <option value="theatres_and_entertainments">theatres and entertainments</option>
+            <option value="urban_environment">urban environment</option>
+            <option value="archaeology">archaeology</option>
+            <option value="burial_places">burial places</option>
+            <option value="fortifications">fortifications</option>
+            <option value="historical_places">historical places</option>
+            <option value="monuments_and_memorials">monuments and memorials</option>
+            <option value="beaches">beaches</option>
+            <option value="geological_formations">geological formations</option>
+            <option value="glaciers">glaciers</option>
+            <option value="islands">islands</option>
+            <option value="natural_springs">natural springs</option>
+            <option value="nature_reserves">nature reserves</option>
+            <option value="water">water</option>
+            <option value="buddhist_temples">buddhist temples</option>
+            <option value="cathedrals">cathedrals</option>
+            <option value="egyptian_temples">egyptian temples</option>
+            <option value="hindu_temples">hindu temples</option>
+            <option value="monasteries">monasteries</option>
+            <option value="mosques">mosques</option>
+            <option value="synagogues">synagogues</option>
+            <option value="other_temples">other temples</option>
+        </select>
+    </p>
+    </br>
+    <p>What presentation type do you want the attractions to be shown?
+        <select name="presentation_type">
+            <option value="in_table">in table</option>
+            <option value="on_map">on map</option>
+        </select>
+    </p>
+    <input type="submit" value="search!">
+</form>
+</br>
+</br>
+</br>
+<form action="/buying_air_tickets" method="POST">
+    <h2>Searching for the plane tickets</h2>
+    <p>input your departure city  <input name="dep_city_name" type="text"/>
+    </p>
+    <p>input your destination city  <input name="des_city_name" type="text"/>
+    </p>
+    <p>input month
+        <select name="month">
+            <option value="01">January</option>
+            <option value="02">February</option>
+            <option value="03">March</option>
+            <option value="04">April</option>
+            <option value="05">May</option>
+            <option value="06">June</option>
+            <option value="07">July</option>
+            <option value="08">August</option>
+            <option value="09">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+        </select>
+        input day
+        <select name="day">
+            <option value="01">01</option>
+            <option value="02">02</option>
+            <option value="03">03</option>
+            <option value="04">04</option>
+            <option value="05">05</option>
+            <option value="06">06</option>
+            <option value="07">07</option>
+            <option value="08">08</option>
+            <option value="09">09</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+            <option value="21">21</option>
+            <option value="22">22</option>
+            <option value="23">23</option>
+            <option value="24">24</option>
+            <option value="25">25</option>
+            <option value="26">26</option>
+            <option value="27">27</option>
+            <option value="28">28</option>
+            <option value="29">29</option>
+            <option value="30">30</option>
+            <option value="31">31</option>
+        </select>
+    </p>
+    <input type="submit" value="search!">
+</form>
+</div>
+<div id="pictures">
+    <img src="static/index_pictures/travel_US.jpg" width=720/>
+</div>
+</div>
+<p class="email"><a href="mailto: wqrydqk@umich.edu">Send Feedback Email</a></p>
+</body>
+</html>

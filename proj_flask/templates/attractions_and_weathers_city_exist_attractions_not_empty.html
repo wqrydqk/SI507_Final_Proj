@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>weather page</title>
+    <link rel="icon" href="static/favicon/travel.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="static/favicon/travel.ico" type="image/x-icon" />
+    <style>
+    div.graph {width:1300px;
+                   margin:1px auto;
+                   height:700px}
+        .div2{
+        width: 1000px;
+        height: 125px;
+        }
+        .div1{
+        float: left;
+        width: 125px;
+        height: 125px;
+        text-align: center;
+        }
+        .div1 img{width:100%;}
+        .div1 p{text-align:center;}
+        .div1 h4{text-align:center;}
+
+        div.attractions_information{
+        text-indent: 50px
+        }
+        form{
+        text-indent: 100px
+        }
+    </style>
+    <script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+<p>
+    Return <a href='/'>Home Page</a>
+</p>
+
+<details>
+    <summary>
+        <h1>View the <span style="color:orange; font-size:48pt">weather prediction</span> in <span style="color:blue; font-size:48pt">{{cityname}}</span></h1>
+    </summary>
+    <div>
+{% for temp_date in my_list %}
+<h2>{{temp_date.date}}---- lowest: {{temp_date.temp_min_c}} highest: {{temp_date.temp_max_c}}</h2>
+<div class="div2">
+{% for picture in temp_date.Timeframes %}
+<div class="div1">
+<img src={{picture.wx_icon}} />
+    <h4>{{picture.wx_desc}}</h4>
+    <p>{{picture.time}}<p>
+</div>
+{% endfor %}
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+{% endfor %}
+    </div>
+</details>
+
+
+<h1>View <span style="color:green; font-size:48pt">{{attraction_type}}</span> in <span style="color:blue; font-size:48pt">{{cityname}} &nbsp</span></h1>
+<div class="attractions_information">
+    <ul>
+        <li><h2>Your choice for displaying the attractions is: '{{presentation_type}}'</h2></li>
+{% if presentation_type=="in_table" %}
+<ul>
+    <table border="1">
+        <caption>The list of {{attraction_type}} in {{cityname}}</caption>
+        <tr>
+            <th>attraction name</th>
+            <th>latitude</th>
+            <th>longitude</th>
+        </tr>
+    {% for attraction in attractions_position %}
+    <tr>
+        <td>
+            {{attraction.attr_name}}
+        </td>
+        <td>
+            {{attraction.lat}}
+        </td>
+        <td>
+            {{attraction.lon}}
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+</ul>
+{% else %}
+<div class="graph" id="myDiv1">
+    <script>
+        var bars = '{{plot_content | safe}}'
+        var obj = JSON.parse(bars)
+        Plotly.newPlot('myDiv1', obj)
+    </script>
+</div>
+{% endif %}
+        <li><h2> Select the one of {{attraction_type}} you are interested in to view the hotels nearby(within 3 km)</h2></li>
+<form action="/find_hotels_exists" method="POST">
+    <p>You want your hotel near which attraction?</p>
+        {% for attraction in attractions_position %}
+    <span style="display:block; text-indent:150px;"><input type="radio" name="attr_choice" value="{{attraction.lat}}, {{attraction.lon}}, {{attraction.attr_name}}">{{attraction.attr_name}}</span></br>
+        {% endfor %}
+    </br>
+    <p>What presentation type do you want the hotels to be shown?
+        <select name="hotel_presentation_type">
+            <option value="in_table">in table</option>
+            <option value="in_bar_plot">in bar plot</option>
+        </select>
+    </p>
+    <span style="display:block; text-indent:150px;"><input type="submit" value="get hotels!"></span>
+</form>
+    </ul>
+</div>
+</body>
+</html>
