@@ -5,6 +5,7 @@ import json
 import sqlite3
 import pandas as pd
 import secrets
+import re
 
 
 class CityAttrInfo:
@@ -625,7 +626,7 @@ def show_attractions_and_weathers():
                 attractions_str = []
                 attractions_position = []
                 for i in range(num_of_attr):
-                    name_to_modify_list  = temp_city.attractions[i]['name'].split("'")
+                    name_to_modify_list = re.split(''''|"''',temp_city.attractions[i]['name'])
                     name_modified = ' '.join(name_to_modify_list)
                     temp_attraction = Attraction(name_modified,
                                                  temp_city.attractions[i]['point']['lon'],
@@ -688,7 +689,7 @@ def show_hotels():
                                hotel_reviews,
                                hotel_phone)
             hotel_list.append(temp_hotel)
-            temp_hotel_name_without_quotation_list = temp_hotel.name.split("'")
+            temp_hotel_name_without_quotation_list = re.split(''''|"''', temp_hotel.name)
             temp_hotel.name = " ".join(temp_hotel_name_without_quotation_list)
             hotel_info_list.append({'hotel_name': temp_hotel.name,
                                     'hotel_price': temp_hotel.price,

@@ -31,7 +31,7 @@ a. For the main file to run the app:
 flask, requests, plotly, pandas.
 
 b. For the file to set up the database: (already included in data-checkpoint)
-Requests, bs4.
+requests, bs4.
 
 5. Instruction on running the app and interacting with it.
 a. In proj_flask directory, run app_main.py directly, then the app is running.
