@@ -27,7 +27,7 @@ Go to the url: https://www.yelp.com/developers/, and sign up a develop account u
 Besides the api keys, when using plotly to plot the attractions on map, we used the Mapbox Map, which requires a token. One should go to the url: https://account.mapbox.com/, and sign in there to apply for the token. Only with this token can we plot out the map and the attraction points.
 
 4. Required Packages:
-a. For the main file to run the api:
+a. For the main file to run the app:
 flask, requests, plotly, pandas.
 
 b. For the file to set up the database: (already included in data-checkpoint)
